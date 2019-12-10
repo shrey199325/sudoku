@@ -1,13 +1,13 @@
-window.addEventListener('load', function () {
-  alert("It's loaded!")
 
-var button = $("div.form > button#new");
+var button_new = document.getElementById("new");
+var button_solve = document.getElementById("solve");
 
-button.addEventListener('click', async _ => {
+button_new.addEventListener('click', async _ => {
   try {
     var response = await fetch(window.location.href, {
       method: 'post',
-      body: {
+      json: {
+        "method": "set",
         "sudoku_str": "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
       }
     });
@@ -17,4 +17,18 @@ button.addEventListener('click', async _ => {
   }
 });
 
+button_solve.addEventListener('click', async _ => {
+  try {
+    var response = await fetch(window.location.href, {
+      method: 'post',
+      json: {
+        "method": "solve",
+        "sudoku_str": "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
+      }
+    });
+    console.log('Completed!', response);
+  } catch(err) {
+    console.error(`Error: ${err}`);
+  }
 });
+

@@ -1,10 +1,13 @@
 from datetime import datetime
 
 EMPTY_ENTRY: int = 0
+DEFAULT_STR = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
 
 
 class Sudoku:
-    def __init__(self, board):
+    def __init__(self, board=None):
+        if board is None:
+            board = DEFAULT_STR
         self.board = self.convert_sudoku(board)
         self.totalBands, self.totalStacks = len(self.board), len(self.board[0])
         self.subGridSize = int(self.totalBands ** 0.5)
@@ -16,10 +19,28 @@ class Sudoku:
         end_time = datetime.now()
         return (end_time - start_time), sudoku_solved
 
-    def convert_sudoku(self, board):
-        if isinstance(self, self.__class__):
-            print(True)
-        return board
+    @staticmethod
+    def convert_sudoku(board):
+        sudoku_board, temp = [], []
+        for index, i in enumerate(board):
+            if index != 0 and index % 9 == 0:
+                sudoku_board.append(temp)
+                temp = []
+            if i != ".":
+                temp.append(int(i))
+            else:
+                temp.append(0)
+        sudoku_board.append(temp)
+        return sudoku_board
+
+    def template_printable(self):
+        temp = []
+        for i in range(self.totalBands):
+            temp.append(list(self.board[i]))
+            for j in range(self.totalStacks):
+                if temp[i][j] == 0:
+                    temp[i][j] = ""
+        return temp
 
     def can_solve_sudoku_from_cell(self, row, col):
         if col == self.totalStacks:
