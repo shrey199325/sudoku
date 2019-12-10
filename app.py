@@ -1,8 +1,7 @@
-from flask import Flask, jsonify, request
-from flask_restful import Api, Resource
+from flask import Flask, jsonify, request, render_template
 
-app = Flask(__name__)
-api = Api(app)
+app = Flask(__name__, template_folder='template')
+# api = Api(app)
 # Status Codes #
 OK = 200
 INVALID_SUDOKU = 301
@@ -10,17 +9,27 @@ INCOMPLETE_INFO = 302
 #
 
 
-class SudokuSolver(Resource):
-    def post(self):
-        posted_data = request.get_json()
-        ret_json = {
-            "status": OK, "msg": "Successfully signed in",
-            "data": posted_data
-        }
-        return jsonify(ret_json)
+@app.route("/")
+def get_sudoku():
+    # posted_data = request.body
+    # ret_json = {
+    #     "status": OK, "msg": "Successfully signed in",
+    #     "data": posted_data
+    # }
+    data = [["", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", "", ""]]
+    print(data)
+    return render_template("sudoku.html", cell=data, time_taken=0)
 
 
-api.add_resource(SudokuSolver, "/")
+# api.add_resource(SudokuSolver, "/")
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
