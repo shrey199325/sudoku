@@ -42,7 +42,8 @@ class TestFlask(unittest.TestCase):
         compare_txt = None
         with open(os.path.join(BASE_PATH, "test_template3.html")) as fd:
             compare_txt = fd.read()
-        req = "2.....9..6..25..13.53..876........7452.417.8687........625..83.19..76..5..5.....7"
+        # req = "2.....9..6..25..13.53..876........7452.417.8687........625..83.19..76..5..5.....7"
+        req = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
         request = {
             "sudoku_str": req,
             "method": "solve"

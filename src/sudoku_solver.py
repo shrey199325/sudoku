@@ -1,7 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
-EMPTY_ENTRY: int = 0
+EMPTY_ENTRY = 0
 DEFAULT_STR = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
+# 2.....9..6..25..13.53..876........7452.417.8687........625..83.19..76..5..5.....7
+global_timeout = None
 
 
 class Sudoku:
@@ -14,9 +16,14 @@ class Sudoku:
         self.allowedRange = range(1, self.totalBands + 1)
 
     def sudoku_solution(self):
-        start_time = datetime.now()
-        sudoku_solved = self.can_solve_sudoku_from_cell(0, 0)
-        end_time = datetime.now()
+        global global_timeout
+        try:
+            start_time = datetime.now()
+            global_timeout = start_time + timedelta(seconds=5)
+            sudoku_solved = self.can_solve_sudoku_from_cell(0, 0)
+            end_time = datetime.now()
+        except TimeoutError:
+            return timedelta(seconds=5), False
         return (end_time - start_time), sudoku_solved
 
     @staticmethod
@@ -43,6 +50,9 @@ class Sudoku:
         return temp
 
     def can_solve_sudoku_from_cell(self, row, col):
+        global global_timeout
+        if datetime.now() > global_timeout:
+            raise TimeoutError
         if col == self.totalStacks:
             col, row = 0, row + 1
             if row == self.totalBands:
