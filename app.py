@@ -11,6 +11,14 @@ INVALID_SUDOKU_SEQUENCE = 302
 
 @app.route("/", methods=["GET", "POST"])
 def get_sudoku():
+    """
+    Accepts GET and POST requests from the browser as Content-type JSON :
+    GET: The default request by the browser which should return default puzzle.
+    POST: There can be two POST requests:
+          1. Set a given new puzzle.
+          2. Solve the current puzzle.
+    Returns the HTML template with respective data.
+    """
     if request.method == "GET":
         sudoku_obj = Sudoku()
         sudoku_ans = Sudoku("." * 81)
