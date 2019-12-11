@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
+import re
 
 EMPTY_ENTRY = 0
-DEFAULT_STR = "4.....8.5.3..........7......2.....6.....8.4......1.......6.3.7.5..2.....1.4......"
-# 2.....9..6..25..13.53..876........7452.417.8687........625..83.19..76..5..5.....7
-global_timeout = None
+DEFAULT_STR = "2.....9..6..25..13.53..876........7452.417.8687........625..83.19..76..5..5.....7"
 
 
 class Sudoku:
@@ -14,17 +13,22 @@ class Sudoku:
         self.totalBands, self.totalStacks = len(self.board), len(self.board[0])
         self.subGridSize = int(self.totalBands ** 0.5)
         self.allowedRange = range(1, self.totalBands + 1)
+        self.global_timeout = None
 
     def sudoku_solution(self):
-        global global_timeout
         try:
             start_time = datetime.now()
-            global_timeout = start_time + timedelta(seconds=5)
+            self.global_timeout = start_time + timedelta(seconds=5)
             sudoku_solved = self.can_solve_sudoku_from_cell(0, 0)
             end_time = datetime.now()
         except TimeoutError:
-            return timedelta(seconds=5), False
-        return (end_time - start_time), sudoku_solved
+            return self.timing_delta(timedelta(seconds=5)), False
+        return self.timing_delta(end_time - start_time), sudoku_solved
+
+    @staticmethod
+    def validator(board):
+        re_exp = "^[1-9.]*$"
+        return re.match(re_exp, board) is not None and len(board) == 81
 
     @staticmethod
     def convert_sudoku(board):
@@ -40,6 +44,10 @@ class Sudoku:
         sudoku_board.append(temp)
         return sudoku_board
 
+    @staticmethod
+    def timing_delta(td):
+        return td
+
     def template_printable(self):
         temp = []
         for i in range(self.totalBands):
@@ -50,8 +58,7 @@ class Sudoku:
         return temp
 
     def can_solve_sudoku_from_cell(self, row, col):
-        global global_timeout
-        if datetime.now() > global_timeout:
+        if datetime.now() > self.global_timeout:
             raise TimeoutError
         if col == self.totalStacks:
             col, row = 0, row + 1
