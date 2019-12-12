@@ -1,4 +1,5 @@
-# SUDOKU
+# SUDOKU  [![Build Status](https://travis-ci.org/shrey199325/sudoku.png)](https://travis-ci.org/shrey199325/sudoku)
+
 This is a Flask based SUDOKU puzzle solver. It performs three operations:
 1. Provides a default Sudoku puzzle.
 1. Lets the users add a new Sudoku puzzle.
@@ -67,3 +68,5 @@ Make sure python 3.x is installed in the system. Latest version 3.8 is preferabl
     `pip install -r requirements.txt; python app.py`
     
 In both the cases, the page can be accessed at `http://localhost:5000` from the local system.
+
+

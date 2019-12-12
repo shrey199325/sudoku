@@ -1,0 +1,14 @@
+language: python
+python:
+  - "3.6"
+
+install:
+  - pip install -r requirements.txt
+
+services:
+  - docker
+
+before_script: pip install docker-compose
+
+script:
+  - docker-compose run --rm web sh -c "python -m nose2 -v"
